@@ -1,0 +1,7 @@
+recipe_content.show_message:
+  path: '/recipe/message'
+  defaults:
+    _controller: '\Drupal\recipe_content\Controller\RecipeContent::showMessage'
+    _title: 'Show Message for recipe content page.'
+  requirements: 
+    _permission: 'access content'
