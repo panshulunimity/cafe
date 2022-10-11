@@ -1,0 +1,8 @@
+uuid: b0a76f86-bdaa-427c-a3d2-4311c449b224
+langcode: en
+status: true
+dependencies: {  }
+id: quick_recipes
+label: 'Quick Recipes'
+revision: 0
+description: 'A block that will contain 2 min recipe details'

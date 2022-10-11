@@ -1,4 +1,4 @@
-uuid: de4c7400-dfd7-474a-88bd-d1d5abe7c5e7
+uuid: 8514113a-28b2-43cf-b4e2-ee8084627730
 langcode: en
 status: true
 dependencies: {  }
@@ -7,7 +7,7 @@ _core:
 id: feedback
 label: 'Website feedback'
 recipients:
-  - panshul@unimity
+  - admin@example.com
 reply: ''
 weight: 0
 message: 'Your message has been sent.'

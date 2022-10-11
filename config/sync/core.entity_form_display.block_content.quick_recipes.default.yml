@@ -1,0 +1,46 @@
+uuid: 9202786a-dce1-4df3-aed7-4a22185de8f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.quick_recipes
+    - field.field.block_content.quick_recipes.body
+    - field.field.block_content.quick_recipes.field_recipe_image
+    - field.field.block_content.quick_recipes.field_recipe_name
+    - image.style.thumbnail
+  module:
+    - image
+    - text
+id: block_content.quick_recipes.default
+targetEntityType: block_content
+bundle: quick_recipes
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 2
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_recipe_image:
+    type: image_image
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_recipe_name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  info: true

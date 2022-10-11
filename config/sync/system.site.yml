@@ -1,10 +1,10 @@
 _core:
   default_config_hash: VDJxTZtQR21qB4lvOq8zszJZLvLKrSPQpdn2E3T71Ww
 langcode: en
-uuid: d01c5d3c-f8ea-47a5-b870-9f412b0554d5
-name: Restaurants
-mail: panshul@unimity
-slogan: 'Restaurant website.'
+uuid: 731afad2-97a5-4e16-90a0-301548f873a5
+name: 'Drush Site-Install'
+mail: admin@example.com
+slogan: ''
 page:
   403: ''
   404: ''
