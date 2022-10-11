@@ -1,0 +1,45 @@
+uuid: 643845b0-3cb2-4e86-b010-e4d0f085f119
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.quick_recipes
+    - core.entity_view_mode.block_content.quick_recipe_food
+    - field.field.block_content.quick_recipes.body
+    - field.field.block_content.quick_recipes.field_recipe_image
+    - field.field.block_content.quick_recipes.field_recipe_name
+  module:
+    - image
+    - text
+id: block_content.quick_recipes.quick_recipe_food
+targetEntityType: block_content
+bundle: quick_recipes
+mode: quick_recipe_food
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_recipe_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_recipe_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden: {  }

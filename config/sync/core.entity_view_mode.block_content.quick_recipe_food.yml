@@ -1,0 +1,10 @@
+uuid: 2c090d39-9e05-48f0-9192-f78e985e03cd
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+id: block_content.quick_recipe_food
+label: 'Quick Recipe - Food'
+targetEntityType: block_content
+cache: true

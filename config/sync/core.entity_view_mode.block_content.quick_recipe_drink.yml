@@ -1,0 +1,10 @@
+uuid: 223081bd-8f09-4c3f-bd6e-356f1d92afaa
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+id: block_content.quick_recipe_drink
+label: 'Quick Recipe - Drink'
+targetEntityType: block_content
+cache: true
