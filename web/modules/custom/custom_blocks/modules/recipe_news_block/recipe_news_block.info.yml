@@ -1,0 +1,8 @@
+name: Recipe News Block
+type: module
+description: 'Module for displaying recipe news in a basic custom block without template.'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+dependencies:
+  - drupal:block
+  - drupal:custom_blocks

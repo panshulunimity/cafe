@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * File for writing helper methods for the block.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function chef_speciality_theme() {
+    return [
+      'chef_speciality' => [
+        'variables' => [
+          'data' => [],
+        ],
+      ],
+    ];
+  }

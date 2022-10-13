@@ -1,0 +1,7 @@
+name: Custom blocks
+type: module
+description: 'This module contains just sub modules.'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+dependencies:
+  - drupal:block

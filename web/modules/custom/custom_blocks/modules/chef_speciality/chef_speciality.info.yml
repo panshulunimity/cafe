@@ -1,0 +1,8 @@
+name: Chef Speciality
+type: module
+description: 'Module for displaying Chef Speciality (using a twig template).'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+dependencies:
+  - drupal:block
+  - drupal:custom_blocks
