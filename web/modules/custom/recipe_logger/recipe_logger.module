@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * File for writing all helper methods of the class.
+ */
+
+/**
+ * Implements hook_preprocess_node.
+ */
+function recipe_logger_preprocess_node(&$variables){
+    $data = \Drupal::service('recipe_logger.logger')->logData();
+}

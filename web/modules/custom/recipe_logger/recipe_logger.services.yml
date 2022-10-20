@@ -1,0 +1,14 @@
+services:
+  recipe_logger.logger:
+    class: Drupal\recipe_logger\RecipeLogger
+
+# mymodule.custom_services:
+#   class: Drupal\mymodule\CustomService
+#   arguments: ['@current_user']
+
+# module_name.service_name:
+#   class_location: namespace_of_the_class
+#   additional_settings (ex. arguments, etc..)
+
+# Example of arguments - if the service is dependent upon another service than the service can be passed as argument with " @ " prefix. ex. @database
+## if the service is dependent upon a parameter ex. app_root, then parameter should be prefixed & suffixed by %. ex. %app_root%.
