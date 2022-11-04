@@ -1,0 +1,18 @@
+example_routes.content:
+  path: '/first-route'
+  defaults:
+    _controller: 'Drupal\example_routes\Controller\FirstController::content'
+    _title: 'My First Route'
+  requirements:
+    _permission: 'access content'
+
+
+## Structure of the file
+
+#machine_name_of_module.any_relevent_machine_name_of_the_route:
+#  path_of_the_route: '/this/page/opens/and/calls/the/controller'
+#  defaults: this is where actual (required) operation is being performed.
+#    _controller/_form/_entity_view (etc..) you can define here anything, refer drupal documentation for routes "Structure of routes"
+#    _title: (more like browser page title)
+#  requirements: Specify the conditions on which user can see the content of the page.
+# ex. _permisssion: Only if user has a spcific permission, he/she will be allowed to access the page. 

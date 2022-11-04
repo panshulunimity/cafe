@@ -2,6 +2,11 @@ services:
   recipe_logger.logger:
     class: Drupal\recipe_logger\RecipeLogger
 
+# The most important file for creating services in Drupal is .services.yml file.
+# In a module the service yml file can be created & named as <module_machine_name>.servcies.yml
+# Since this file is a yml file. It contains the data in key, value format (standard yaml format).
+# Services is a symfony concept introduced in Drupal from Drupal version 8.
+
 # mymodule.custom_services:
 #   class: Drupal\mymodule\CustomService
 #   arguments: ['@current_user']
@@ -12,3 +17,4 @@ services:
 
 # Example of arguments - if the service is dependent upon another service than the service can be passed as argument with " @ " prefix. ex. @database
 ## if the service is dependent upon a parameter ex. app_root, then parameter should be prefixed & suffixed by %. ex. %app_root%.
+   

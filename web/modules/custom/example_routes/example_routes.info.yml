@@ -1,0 +1,4 @@
+name: Example Routes
+type: module
+description: 'Module for creating custom routes.'
+core_version_requirement: ^8 || ^9 || ^10
