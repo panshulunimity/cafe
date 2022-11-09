@@ -1,3 +1,4 @@
+# Basic Route
 example_routes.content:
   path: '/first-route'
   defaults:
@@ -5,6 +6,56 @@ example_routes.content:
     _title: 'My First Route'
   requirements:
     _permission: 'access content'
+
+# Route with custom access check
+example_routes.custom_access:
+  path: '/example-route-custom-access'
+  defaults:
+    _controller: '\Drupal\example_routes\Controller\ExampleController::content'
+  requirements:
+    _custom_access: '\Drupal\example_routes\Controller\ExampleController::access'
+
+# Parameter Route Example 1
+example_routes.parameters_example_1:
+  path: '/example-route-with-parameters/{node1}/{node2}' -> define
+  defaults:
+    _controller: '\Drupal\example_routes\Controller\ExampleController::contentWithParameters'
+  options:
+    parameters:
+      node1:
+        type: entity:node
+      node2:
+        type: entity:node 
+
+# Parameter Route Example 2
+example_routes.parameters_example_2:
+  path: '/example-route-with-parameters/{user}'
+  defaults:
+    _controller: '\Drupal\example_routes\Controller\ExampleController::contentWithUserParameter'
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+# Parameter Route Example 3
+example_routes.parameters_example_3:
+  path: '/example-route-name-validation/{name}'
+  defaults:
+    _controller: '\Drupal\example_routes\Controller\ExampleController::contentWithNameValidation'
+  requirements:
+    _permission: 'access content'
+    name: '[a-zA-Z]+'
+
+
+# Parameter Route Example 4 - Optional parameter
+example_routes.parameters_example_4:
+  path: '/example-route/report/{issue_type}'
+  defaults: 
+    _controller: '\Drupal\example_routes\Controller\ExampleController::report'
+    issue_type: 'support-request'
+  requirements: 
+    _permission: 'report issue'
+
 
 
 ## Structure of the file
@@ -15,4 +66,32 @@ example_routes.content:
 #    _controller/_form/_entity_view (etc..) you can define here anything, refer drupal documentation for routes "Structure of routes"
 #    _title: (more like browser page title)
 #  requirements: Specify the conditions on which user can see the content of the page.
-# ex. _permisssion: Only if user has a spcific permission, he/she will be allowed to access the page. 
+# ex. _permisssion: Only if user has a spcific permission, he/she will be allowed to access the page.
+
+## Using parameters in the route.
+
+# Parameters in the route (path) can be used to make a route dynamic.
+# For ex. I want to build a page based upon the ID of the site user, In this case the ID is the dynamic part.
+# Why is ID dynamic? Because The ID is dependant upon the user of the site.
+# In this case, we will have to create a dynamic route example. /user/{id}.
+# In this example {id} will be replaces by user's ID, ex. whenever user with ID 2 is visiting the page, the custom controller will be called.
+# Example paths -
+# /user/{id}
+# /node/{id}
+# /complete-custom-path-for-user/{id}
+# /content/{yyyy}/{cid}/{uid} -> Content of a specific year with it's ID & belongs to a user.
+# /reports/{rid} -> Reports as per the region id.
+
+## Using custom access checks in the route.
+
+# requirements:
+#    _custom_access: '\Drupal\example_routes\Controller\ExampleController::access'
+# This will help build a custom access check for a route (path), this can be a simple access check
+# but can be as complex as per the requirement. Ex. Allow only if a user has a role 'content_editor' and is the active user since 3 months.
+# The logic for checking the conditions will go inside the access method written in the controller.
+
+
+## The security ascpect of routes can be estaablished by doing two things - 
+
+# Adding validation to the route parameters (if the route is parameterised)
+# Adding access check to the route (Who should be able to access this path?)
