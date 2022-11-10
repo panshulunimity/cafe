@@ -1,0 +1,31 @@
+example_forms.user_registration_form:
+  path: '/register-me'
+  defaults:
+    _title: 'Example User Registration form'
+    _form: '\Drupal\example_forms\Form\UserRegistrationForm'
+  requirements:
+    _permission: 'access content'
+
+example_forms.user_reg_config_settings:
+  path: '/admin/config/user-registration'
+  defaults:
+    _form: '\Drupal\example_forms\Form\ExampleConfigurationForm'
+    _title: 'example forms module configuration screen'
+  requirements:
+    _permission: 'administer site configuration'
+
+
+## What are the ways of using(or calling a form).
+
+# 1. By Creating a route for the form to open (specific location for redering the form)
+# 2. By using form builder drupal service to get the form ex. $form = \Drupal::formBuilder()->getForm('Drupal\example\Form\ExampleForm');
+
+
+## How can I alter the form?
+
+#/**
+# * Implements hook_form_FORM_ID_alter().
+# */
+# function example_forms_example_forms_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+#  $form['phone_number']['#description'] = t('Start with + and your country code.');
+# }

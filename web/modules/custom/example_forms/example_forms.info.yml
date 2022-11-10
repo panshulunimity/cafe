@@ -1,0 +1,5 @@
+name: Example Forms
+type: module
+description: 'Module for creating custom Forms.'
+core_version_requirement: ^8 || ^9 || ^10
+configure: example_forms.user_reg_config_settings
