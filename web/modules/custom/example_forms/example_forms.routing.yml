@@ -1,3 +1,4 @@
+# Example 1 Simple Registration Form
 example_forms.user_registration_form:
   path: '/register-me'
   defaults:
@@ -6,6 +7,11 @@ example_forms.user_registration_form:
   requirements:
     _permission: 'access content'
 
+ # Basic Form - Ajax Form.
+ # Configuration Form - Configs in Drupal.
+ # Confirm Action Form - Confirmation forms
+
+# Example 2 ConfigForm
 example_forms.user_reg_config_settings:
   path: '/admin/config/user-registration'
   defaults:
@@ -13,6 +19,25 @@ example_forms.user_reg_config_settings:
     _title: 'example forms module configuration screen'
   requirements:
     _permission: 'administer site configuration'
+
+# Example 3 Ajax Form
+example_forms.ajax_form:
+  path: '/ajax-form'
+  defaults:
+    _title: 'Example Ajax form'
+    _form: '\Drupal\example_forms\Form\AjaxForm'
+  requirements:
+    _permission: 'access content'
+
+# Example 4 ConfirmForm
+example_forms.delete:
+  path: '/example/{id}/delete'
+  defaults:
+    _form: '\Drupal\example_forms\Form\ConfirmDeleteForm'
+    _title: 'Confirm Deletion'
+  requirements:
+    _permission: 'administer site configuration'
+    id: ^\d+$
 
 
 ## What are the ways of using(or calling a form).
