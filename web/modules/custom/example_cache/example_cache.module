@@ -1,0 +1,45 @@
+<?php
+
+use Drupal\Core\Cache\Cache;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Cache\CacheBackendInterface;
+
+
+/**
+ * @file
+ * File for implementing cache related helper methods.
+ */
+
+/**
+ * Implments hook_node_presave().
+ */
+function example_cache_node_presave(Node $node) {
+  // This is how you use a tag - thing:identifier (ex. user:5, taxonomy_term:6 etc)  
+  $tags = ['node:2'];
+  if ($tags) {
+    // invalidateTags method will invalidate the tags passed. 
+    // (check method implementation in implementing class).
+    Cache::invalidateTags($tags);
+  }
+
+  // This is how you can set a custom tag.
+  $setTags = [
+    'my_custom_tag',
+    'more_custom_tag',
+  ];
+  // This is the proper code - \Drupal::cache()->set($cid, $data, CacheBackendInterface::CACHE_PERMANENT, $tags);
+  // CID could be any custom cache ID (string).
+  // DATA could be a string ID or an oject to which this custom cache tag will be tagged.
+  // CacheBackendInterface::CACHE_PERMANENT is to tell drupal that this has to be permanently cached until invalidated.
+  // Check other methods like - setMultiple / delete / deleteAll inside implenting class.
+  \Drupal::cache()->set('new_custom_cache', 'some_data', CacheBackendInterface::CACHE_PERMANENT, $setTags);
+  // Invalidate the custom tags set.
+  Cache::invalidateTags($setTags);
+
+ // CACHE BINS - Are used to store cached data. 
+ // bootstrap: Data needed from the beginning to the end of most requests, that has a very strict limit on variations and is invalidated rarely.
+ // render: Contains cached HTML strings like cached pages and blocks, can grow to large size.
+ // data: Contains data that can vary by path or similar context.
+ // discovery: Contains cached discovery data for things such as plugins, views_data, or YAML discovered data such as library info.
+}
+

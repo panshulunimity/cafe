@@ -1,0 +1,4 @@
+name: Example Cache
+type: module
+description: 'Module for creating custom cache.'
+core_version_requirement: ^8 || ^9 || ^10
