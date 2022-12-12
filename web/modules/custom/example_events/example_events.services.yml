@@ -1,0 +1,16 @@
+services:
+  # Example 1
+  # Name of this service.
+  example_config_events_subscriber:
+    # Event subscriber class that will listen for the events.
+    class: '\Drupal\example_events\EventSubscriber\ConfigEventsSubscriber'
+    # Tagged as an event_subscriber to register this subscriber with the event_dispatch service.
+    tags:
+      - { name: 'event_subscriber' }
+
+  # Example 2
+  # Subscriber to the event we dispatch in hook_user_login.
+  example_events_user_login:
+    class: '\Drupal\example_events\EventSubscriber\UserLoginSubscriber'
+    tags:
+      - { name: 'event_subscriber' }
