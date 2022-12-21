@@ -1,0 +1,13 @@
+<?php
+
+// Adding / Attaching assets to the page using theme.
+
+/**
+ * Implements hook_page_attachments().
+ */
+function restaurant_page_attachments(array &$page) {
+  // This is another way of adding/attaching assets to the page.
+  if ($page->node) {
+    $page['#attached']['library'][] = 'restaurant/restaurant-recipe-menu';
+  }
+}

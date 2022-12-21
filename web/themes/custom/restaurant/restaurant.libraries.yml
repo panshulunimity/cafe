@@ -1,0 +1,67 @@
+# Example 1 -> Simple library with Stylesheet as the asset.
+restaurant-global-styling:
+  version: 1.x
+  css:
+    layout:
+      css/layout/restaurant-node-layout.css: {}
+  js:    
+    js/global-slider.js: {}
+
+# This is a library creation file.
+# This YAML file is used for adding assets to the page. The assets could be - fonts, stylesheets or script files (ex. Javascript)
+#restaurant-global-styling: --> This is the name of the library that may hold any type of assets mentioned above.
+#  version: 1.x --> Version can be used to maintain different versions of library. This is mainly for contribution purposes.
+#  css: --> The type of asset you want to attach.
+#    layout: --> This helps in categorizing assets in case of stylesheets. This could be "base" or "component". Please refer the following documentation for complete list - https://www.drupal.org/docs/creating-modules/adding-assets-css-js-to-a-drupal-module-via-librariesyml 
+#      css/restaurant-node-layout.css: {} -> The name of the actual stylesheet file you are attaching.
+
+# =========================================================================================================================
+
+# Example 2 -> Simple library with JS asset and dependency on jQuery.
+restaurant-global-slider:
+  version: 1.x
+  header: true
+  js:
+    js/global-slider.js: {}
+  dependencies:
+    - core/jquery
+
+#restaurant-global-slider: --> Name of the library.
+#  version: 1.x --> Version of contribution purposes.
+#  header: true --> This signifies that this particular asset should be attached to the header section of the page. By default, all js assets are added to the footer section.
+#  js:
+#    js/cuddly-slider.js: {}    --> Notice that in case of JS there is no "layout" or "base" or "component" categorization unlike stylehseets. This is not the case of Script files.
+#  dependencies:
+#    - core/jquery  --> Drupal loads the jQuery library only if you tell drupal to load it. This is for performance reasons. If your library depends upon another library, the name of the library can be added to this section.
+
+# =========================================================================================================================
+
+# Example 3 -> Library with configurable Javascript asset / Sending data from backend (PHP server) to web browser (javascript).
+restaurant-recipe-menu:
+  version: 1.x
+  js:
+    js/recipe-menu.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+
+# Notice the last line of previous exxample. We have requested drupal to add the drupalSettings variable to the page.
+# This variable will hold the javascript object that will contain all drupal specific javascript objects.
+# To make this working the following piece of code will added to theme / module file.
+#$computed_settings = [  // Simple array that holds the data that needs to be passed to browser from server
+#  'foo' => 'bar',
+#  'baz' => 'qux',
+#];
+#$build['#attached']['library'][] = 'restaurant/restaurant-recipe-menu'; // <your_module(theme)_name>/<library_name>
+#$build['#attached']['drupalSettings']['restaurant']['recipeMenu'] = $computed_settings;
+
+# ========================================================================================================================
+
+# Example 4 -> disabling aggregation
+restaurant-recipe-information:
+  version: 1.x
+  js:
+    js/recipe-information.js: {preprocess: false}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
