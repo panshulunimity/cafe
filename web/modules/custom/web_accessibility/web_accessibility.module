@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * @file for helper functions.
+ */
+
+function web_accessibility_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'web_accessibility/web_accessibility';
+}

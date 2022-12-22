@@ -1,0 +1,4 @@
+name: Web Accessibility
+type: module
+description: 'Module to ensure that web accessibility is taken care of.'
+core_version_requirement: ^9

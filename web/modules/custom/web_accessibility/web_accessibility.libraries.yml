@@ -1,0 +1,5 @@
+web_accessibility:
+  js:
+    js/accessibility.js: {}
+  dependencies:
+    - core/jquery
