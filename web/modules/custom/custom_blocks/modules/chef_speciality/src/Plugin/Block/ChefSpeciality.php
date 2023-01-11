@@ -21,7 +21,7 @@ class ChefSpeciality extends BlockBase {
   public function build() {
     return [
       '#theme' => 'chef_speciality',
-      '#data' => ['dish' => 'Egg Fried Rice', 'Category' => 'Chinese'],
+      '#dish_name' => ['dish' => 'Egg Fried Rice', 'Category' => 'Chinese'],
     ];
   }
 

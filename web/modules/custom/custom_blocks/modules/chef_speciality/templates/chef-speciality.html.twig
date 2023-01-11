@@ -1,3 +1,63 @@
-{% for key,value in data %}
+{% for key,value in dish_name %}
   <strong>{{ key }}:</strong> {{ value }}<br>
 {% endfor%}
+
+{#
+/**
+ * Twig Filters Examples
+ * Example - 1 - Trans & placeholders
+ */
+#}
+{# {% trans %} Submitted on {{ "Monday"|placeholder }} {% endtrans %} #}
+
+{#
+/**
+ * Twig Filters Examples
+ * Example - 2 - safe_joins
+ */
+#}
+{# {% for key,value in dish_name %}
+  {{ value|safe_join(', ') }}
+{% endfor%} #}
+
+{#
+/**
+ * Twig Functions - Attach Library
+ */
+#}
+{# {{ attach_library('classy/node') }} #}
+
+{#
+/**
+ * Twig Functions - create_attribute()
+ */
+#}
+{# {% set my_attribute = create_attribute() %}
+{%
+  set my_classes = [
+    'kittens',
+    'llamas',
+    'puppies',
+  ]
+%}
+<div{{ my_attribute.addClass(my_classes).setAttribute('id', 'myUniqueId') }}>
+  {{ content }}
+</div> #}
+
+{#
+/**
+ * Macros in Twig.
+ */
+#}
+{# {% macro input(name, value, type, size) %}
+  <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+{% endmacro %}
+
+{{ _self.input(name, value, type, size) }} #}
+
+{#
+/**
+ * Extending a Twig Template.
+ */
+#}
+{# {% extends "@classy/block/block--system-menu-block.html.twig" %} #}

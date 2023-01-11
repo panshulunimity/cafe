@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\block\Entity\Block;
+
 /**
  * @file
  * File for writing helper methods for the block.
@@ -12,8 +14,46 @@ function chef_speciality_theme() {
     return [
       'chef_speciality' => [
         'variables' => [
-          'data' => [],
+          'dish_name' => NULL,
         ],
       ],
     ];
   }
+
+// Example 1 = Prpeprocess Twig Template and pass new variable to the template
+function chef_speciality_preprocess_block(&$variables) {
+  if ($variables['elements']['#plugin_id'] == 'chef_speciality') {
+    $variables['base_path'] = base_path();
+    kint($variables);
+  }
+}
+
+/**
+ * Other Example of preprocessing node.
+ */
+function chef_speciality_preprocess_node(&$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (!empty($node) && is_object($node)) {
+    $nid = $node->id();
+    $variables['id'] = $nid;
+  }
+}
+
+// Example 2 - Theme Hook Suggestions for adding a custom template.
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * Add custom block theme suggestion based on block type and display.
+ */
+function chef_speciality_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+   // Region suggestion for blocks in Drupal.
+   if (isset($variables['elements']['#id'])) {
+    if ($block = Block::load($variables["elements"]["#id"])) {
+      $region = $block->getRegion();
+      $suggestions[] = 'block__' . $region;
+      $suggestions[] = 'block__' . $region . '__' . $variables['elements']['#base_plugin_id'];
+      $suggestions[] = 'block__' . $region . '__' . $variables['elements']['#id'];
+      $suggestions[] = 'block__' . $region . '__' . $variables['elements']['#base_plugin_id'] . '__' . $variables['elements']['#id'];
+    }
+  }
+}
