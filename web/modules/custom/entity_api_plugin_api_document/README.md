@@ -102,33 +102,6 @@ Most of the plugins in Drupal 8 will use annotations to register themselves and 
 - Conditions (used for Block visibility in the core)
 - Migrate source, process & destination plugins
 
-
-## Entity API
-
-The Entity System is the API for entities manipulation (CRUD: create, read, update, delete)
-
-### What is Entity in Drupal?
-
-- Entity in drupal can be defined as the object that stores information and can be processed using CRUD operations mentioned above.
-
-- In Drupal Entity can be categorized into - Node, Taxonomy, User, Block etc..
-
-- Entities in Drupal are of two types 
-  - Content Entity 
-  - Configuration Entity
-
-- To be more specific, the Entity API in drupal helps break down an entity (could be Node, taxonomy etc..) into it's components and this helps us understand - 
-  - How an Entity in Drupal is formed?
-  - What does an Entity comprise of?
-  - How do we build our own entity in Drupal?
-  - What operations are performed (or needs to be taken care of) when we are building our own entity.
-
-In contrast to other discovery mechanisms, the annotation metadata lives in the same file and is an integral part of the class that implements the plugin. This makes it easier to find and easier to create a new custom plugin by simply copying an existing one.
-
-Annotations allow for complex structured data, and you can indicate that certain strings are to be translated. In many cases, plugins have an associated custom annotation class that can be used to both document and set default values for the metadata.
-
-In addition, there is a performance bonus as it makes Drupal use less memory when discovering plugins. The original implementation had a getInfo() method on each class, similar to Drupal 7 test classes. This meant each class had to be loaded into memory to get its information and the memory was not freed until the end of the request, thus greatly increasing the peak memory requirement for PHP. Instead, the implementation used by Drupal to parse the annotation simply tokenizes the text of the file without including it as a PHP file, so memory use is minimized.
-
 ### The annotation syntax ( and example)
 
 ```php
@@ -156,13 +129,285 @@ class UserNameUnique extends Constraint {
 }
 ```
 
+
+## Entity API
+
+The Entity System is the API for entities manipulation (CRUD: create, read, update, delete)
+
+### What is Entity in Drupal?
+
+- Entity in drupal can be defined as the object that stores information and can be processed using CRUD operations mentioned above.
+
+- In Drupal Entity can be categorized into - Node, Taxonomy, User, Block etc..
+
+- Entities in Drupal are of two types 
+  - Content Entity 
+  - Configuration Entity
+
+- To be more specific, the Entity API in drupal helps break down an entity (could be Node, taxonomy etc..) into it's components and this helps us understand - 
+  - How an Entity in Drupal is formed?
+  - What does an Entity comprise of?
+  - How do we build our own entity in Drupal?
+  - What operations are performed (or needs to be taken care of) when we are building our own entity.
+
 ### Content vs. Configuration Entities in Drupal
-
-#### Configuration Entity
-
-Used by the Configuration System. Supports translations and can provide custom defaults for installations. Configuration entities are stored within the common `config` database table as rows.
 
 #### Content Entity
 
 Consist of configurable and base fields, and can have revisions and support translations. Content entities are stored within a custom database table as rows. The table name is the same as the content entity "id", and the columns are defined by the entity's "baseFieldDefinitions" method.
 
+#### Configuration Entity
+
+Used by the Configuration System. Supports translations and can provide custom defaults for installations. Configuration entities are stored within the common `config` database table as rows.
+
+##### Differences compared to Content Entity
+
+- Integrates with CMI API for exportability.
+- Doesn't have fields but uses properties instead.
+- Schema file (Content Entity uses hook_schema())
+
+### Bundles
+
+- Bundles are different variants of an entity type. For example, with the node entity type, the bundles are the different node types, such as 'article' and 'page'.
+
+- Typically, a bundle is represented by a Configuration Entity, though other models exist in contrib modules. So in the node example, the 'article' node type is itself a configuration entity.
+
+### Annotations
+
+- When creating a new entity type, you'll need to use the annotations system built into core. 
+
+- Annotations look like docblock comments above the class, but are parsed and cached by Drupal core.
+
+- Example Syntax - 
+
+```php
+/**
+ * @ContentEntityType(
+ *   id = "my_entity_type_id",
+ *   label = @Translation("My entity type label"),
+ *   example_pair = "this_examples_value",
+ *   example_array = {
+ *     "array_key" = "array_value",
+ *     "some_other_key" = "some_other_value",
+ *   },
+ * )
+ */
+```
+
+### Handlers
+
+- Handlers are defined in the entity annotation as an array. They support the entity by mapping certain parts of its execution to other PHP classes. Those classes will "handle" the assigned parts of the entity's execution.
+
+```php
+handlers = {
+  "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
+  "list_builder" = "Drupal\Core\Entity\EntityListBuilder",
+  "access" = "Drupal\Core\Entity\EntityAccessControlHandler",
+  "views_data" = "Drupal\views\EntityViewsData",
+  "storage" = "Drupal\Core\Entity\Sql\SqlContentEntityStorage",
+  "storage_schema" = "Drupal\Core\Entity\Sql\SqlContentEntityStorageSchema",
+  "translation" = "Drupal\content_translation\ContentTranslationHandler",
+  "form" = {
+    "default" = "Drupal\Core\Entity\ContentEntityForm",
+    "add" = "Drupal\Core\Entity\ContentEntityForm",
+    "edit" = "Drupal\Core\Entity\ContentEntityForm",
+    "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
+  },
+  "route_provider" = {
+    "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
+  },
+},
+```
+
+### Links
+
+- Links are defined in the entity annotation with the array syntax. Links have a specific set of keys whose value are URIs where the entity type or single entities of that type can be managed.
+
+```php
+id = "node",
+handlers = {
+  "route_provider" = {
+    "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider"
+  }
+},
+links = {
+  "canonical" = "/node/{node}",
+  "add-page" = "/node/add",
+  "add-form" = "/node/add/{node_type}",
+  "edit-form" = "/node/{node}/edit",
+  "delete-form" = "/node/{node}/delete",
+  "collection" = "/admin/content",
+},
+```
+
+### Working with Entity Types
+---
+#### Generic Entity API Methods - 
+
+```php
+Entity::create()
+Entity::load()
+Entity::save()
+Entity::id()
+Entity::bundle()
+Entity::isNew()
+Entity::label()
+```
+---
+#### How to check whether the object that is bein loaded is of type entity
+
+```php
+// Make sure that an object is an entity.
+if ($entity instanceof \Drupal\Core\Entity\EntityInterface) {
+}
+
+// Make sure it's a content entity.
+if ($entity instanceof \Drupal\Core\Entity\ContentEntityInterface) {
+}
+// or:
+if ($entity->getEntityType()->getGroup() == 'content') {
+}
+
+// Get the entity type or the entity type ID.
+$entity->getEntityType();
+$entity->getEntityTypeId();
+
+// Make sure it's a node.
+if ($entity instanceof \Drupal\node\NodeInterface) {
+}
+
+// Using entityType() works better when the needed entity type is dynamic.
+$needed_type = 'node';
+if ($entity->getEntityTypeId() == $needed_type) {
+}
+```
+---
+
+#### Getting information from an entity
+
+```php
+// Get the ID.
+$entity->id();
+
+// Get the bundle.
+$entity->bundle();
+
+// Check if the entity is new.
+$entity->isNew();
+
+// Get the label of an entity. Replacement for entity_label().
+$entity->label();
+
+// Get the URL object for an entity.
+$entity->toUrl();
+
+// Get internal path, path alias if exists, for an entity.
+$entity->toUrl()->toString();
+
+// Create a duplicate that can be saved as a new entity.
+$duplicate = $entity->createDuplicate();
+```
+
+---
+
+#### Entity Create
+
+```php
+// Use the entity type manager (recommended).
+$node = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => 'article', 'title' => 'Another node']);
+
+
+// You can use the static create() method if you know the entity class.
+$node = Node::create([
+  'type' => 'article',
+  'title' => 'The node title',
+]);
+```
+---
+#### Entity Load
+
+```php
+// Using the storage controller (recommended).
+$entity = \Drupal::entityTypeManager()->getStorage($entity_type)->load(1);
+
+// Use the static method
+$node = Node::load(1);
+
+// Load multiple entities, also exists as entity_load_multiple().
+$entities = \Drupal::entityTypeManager()->getStorage($entity_type)->loadMultiple([1, 2, 3]);
+
+// Load entities by their property values.
+$entities = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['type' => 'article']);
+```
+---
+#### Entity Save
+
+```php
+$node->nid->value = 5;
+$node->enforceIsNew(TRUE);
+$node->save();
+```
+---
+#### Entity Query
+
+```php
+$nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+    
+$ids = $nodeStorage->getQuery()
+  ->condition('status', 1)
+  ->condition('type', 'article') // type = bundle id (machine name)
+  //->sort('created', 'ASC') // sorted by time of creation
+  //->pager(15) // limit 15 items
+  ->execute();
+
+$articles = $nodeStorage->loadMultiple($ids);
+```
+---
+#### Entity Delete
+
+```php
+// Delete a single entity.
+$entity = \Drupal::entityTypeManager()->getStorage('node')->load(1);
+$entity->delete();
+
+// Delete multiple entities at once.
+\Drupal::entityTypeManager()->getStorage($entity_type)->delete([$id1 => $entity1, $id2 => $entity2]);
+```
+---
+#### Entity Access Control
+
+```php
+// Check view access of an entity.
+// This defaults to check access for the currently logged in user.
+if ($entity->access('view')) {
+
+}
+
+// Check if a given user can delete an entity.
+if ($entity->access('delete', $account)) {
+
+}
+```
+---
+
+### Creating a custom entity type
+
+- From all the methods we discussed above and in additionally the concepts related to entity such as - Handlers, Bundle, Links etc.. we now understand what an entity is comprised of.
+
+- Let's take an example of `node` entity type and let's look at the code of the node entity.
+
+- The node entity is complex PHP class that is formed using several Entity API concepts (or components) working together.
+
+- In some cases we have create our own entity programtically.
+
+- We need to understand why custom entities are created - Sometimes we want to take the full control of all the CRUD operations of the entity (including the behaviour of content creation and storage). In this case where a lot of custom requirements are placed to build & use an entity, in that case we can opt for custom entities. These cases could be the following (but are not limited to) - 
+
+  - The Content entity should have a different URL for creating & editing the content example - instead of /node/add URL, it should be /advertisement/create & instead of /node/123/edit, the edit URL should be - /advertisement/123/edit.
+  - The content creation behaviour is different from normal content creation in drupal.
+  - The content storage should be handled in a custom way instead of using default drupal storage mechanism.
+
+### Example of Creating a custom entity.
+
+- Example 1 - Bundle-less content entity type - https://www.drupal.org/docs/drupal-apis/entity-api/creating-a-custom-content-entity
+
+- Example 2 - Fully customised entity like node - https://www.drupal.org/docs/drupal-apis/entity-api/creating-a-content-entity-type-in-drupal-8
